@@ -9,7 +9,8 @@ class Event():
         self.artist = None
         self.venue = None
         self.date = None
-        self.tickets = None
+        self.tickets = ""
+        self.price = ""
         self.parse_div(div0, div1, div2)
 
     def parse_div(self, div0, artist_link, venue_details):
@@ -30,15 +31,22 @@ class Event():
             self.date = datetime.strptime( " ".join(m_date.groups()), "%d %b %Y" )
 
         if "tickets are available" in div0.lower():
-            self.tickets = "tickets are available"
+            self.tickets = "Tickets are available"
         elif "sold out" in div0.lower():
-            self.tickets = "sold out"
+            self.tickets = "Sold out"
         elif "tickets on sale from" in div0.lower():
-            self.tickets = "not yet on sale"
+            self.tickets = "Not yet on sale"
         else:
             m_tickets = re.search( '(\d+ tickets available)', div0.lower() )
             if m_tickets:
                 self.tickets = m_tickets.group(1)
+
+        m_price = re.search( 'class="searchResultsPrice">([^<]+)', div0 )
+        if m_price:
+            self.price = m_price.group(1).strip()
+            if self.price.endswith("="):
+                self.price = self.price[:-1]
+            self.price = self.price.lower().strip()
 
     def title_case(self, string):
         string = string.lower()
@@ -50,6 +58,7 @@ class Event():
         string = self.date.strftime("%d-%b-%Y (%a)").ljust(20)
         string += self.artist
         string += "\n" + (" " * 20) + self.venue
+        string += "\n" + (" " * 20) + self.price
         string += "\n" + (" " * 20) + self.tickets
         return string
 
