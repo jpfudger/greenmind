@@ -56,10 +56,14 @@ class Event():
 
     def __str__(self):
         string = self.date.strftime("%d-%b-%Y (%a)").ljust(20)
-        string += self.artist
-        string += "\n" + (" " * 20) + self.venue
-        string += "\n" + (" " * 20) + self.price
-        string += "\n" + (" " * 20) + self.tickets
+        if self.artist:
+            string += self.artist
+        if self.venue:
+            string += "\n" + (" " * 20) + self.venue
+        if self.price:
+            string += "\n" + (" " * 20) + self.price
+        if self.tickets:
+            string += "\n" + (" " * 20) + self.tickets
         return string
 
 class GreenMind():
