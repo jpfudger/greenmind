@@ -143,7 +143,7 @@ class RoystonFolk():
 
                 date = datetime.strptime( " ".join([day,month,year]), "%d %b %Y" )
 
-                if not date or date < datetime.now():
+                if not date or date.toordinal() < datetime.now().toordinal():
                     continue
 
                 if current:
